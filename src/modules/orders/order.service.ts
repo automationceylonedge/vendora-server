@@ -6,6 +6,12 @@ import type { CreateOrderInput } from './order.validation.js';
 export const SHIPPING_FEE = 450;
 export const FREE_SHIPPING_THRESHOLD = 10000;
 
+function generateCustomOrderId(): string {
+  const ts = Date.now();
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `VND${ts}${rand}`;
+}
+
 export async function createOrder(userId: string, input: CreateOrderInput) {
   const items = input.items.map((item) => ({
     productId: new mongoose.Types.ObjectId(item.productId),
@@ -24,6 +30,7 @@ export async function createOrder(userId: string, input: CreateOrderInput) {
 
   const order = await Order.create({
     user: userId,
+    customOrderId: generateCustomOrderId(),
     items,
     subtotal,
     shipping,

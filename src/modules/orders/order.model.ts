@@ -16,6 +16,7 @@ export interface IDeliveryDetails {
 
 export interface IOrder extends Document {
   user: mongoose.Types.ObjectId;
+  customOrderId: string;
   items: IOrderItem[];
   subtotal: number;
   shipping: number;
@@ -62,6 +63,12 @@ const orderSchema = new Schema<IOrder>(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'User is required'],
+      index: true,
+    },
+    customOrderId: {
+      type: String,
+      required: true,
+      unique: true,
       index: true,
     },
     items: {

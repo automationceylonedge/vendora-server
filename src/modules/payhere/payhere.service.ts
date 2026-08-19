@@ -8,6 +8,8 @@ interface PayHereNotification {
   payhere_currency: string;
   status_code: string;
   md5sig: string;
+  custom_1?: string;
+  custom_2?: string;
   method?: string;
   status_message?: string;
   transaction_id?: string;
@@ -83,7 +85,7 @@ export async function handlePayHereNotify(
   }
 
   const order = await Order.findOneAndUpdate(
-    { _id: notification.order_id },
+    { customOrderId: notification.custom_1 },
     {
       $set: {
         status: orderStatus,
@@ -93,7 +95,7 @@ export async function handlePayHereNotify(
   );
 
   if (!order) {
-    console.warn(`⚠️ Order not found for payhere order_id: ${notification.order_id}`);
+    console.warn(`⚠️ Order not found for custom_1: ${notification.custom_1}`);
   } else {
     console.log(`✅ Order ${notification.order_id} → ${orderStatus}`);
   }
