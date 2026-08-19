@@ -40,6 +40,18 @@ function verifySignature(
     .digest('hex')
     .toUpperCase();
 
+  console.log('── PayHere Sig Debug ──');
+  console.log('merchant_id:', merchantId);
+  console.log('order_id:', notification.order_id);
+  console.log('payhere_amount:', notification.payhere_amount);
+  console.log('payhere_currency:', notification.payhere_currency);
+  console.log('status_code:', notification.status_code);
+  console.log('MD5(merchant_secret):', secretHash);
+  console.log('concat:', data);
+  console.log('expected:', expected);
+  console.log('received:', notification.md5sig);
+  console.log('match:', expected === notification.md5sig);
+
   return expected === notification.md5sig;
 }
 
@@ -57,6 +69,10 @@ export async function handlePayHereNotify(
 ) {
   console.log('── PayHere Notify ──');
   console.log(JSON.stringify(body, null, 2));
+
+  if (!merchantSecret) {
+    console.error('⚠️ PAYHERE_MERCHANT_SECRET env var is empty!');
+  }
 
   const notification = body as unknown as PayHereNotification;
 
