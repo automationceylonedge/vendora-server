@@ -14,6 +14,14 @@ export interface IDeliveryDetails {
   address: string;
 }
 
+export interface IPaymentDetails {
+  paymentId: string;
+  method: string;
+  cardNo: string;
+  cardHolderName: string;
+  cardExpiry: string;
+}
+
 export interface IOrder extends Document {
   user: mongoose.Types.ObjectId;
   customOrderId: string;
@@ -22,6 +30,7 @@ export interface IOrder extends Document {
   shipping: number;
   total: number;
   delivery: IDeliveryDetails;
+  payment?: IPaymentDetails;
   status:
     | 'pending'
     | 'confirmed'
@@ -53,6 +62,17 @@ const deliverySchema = new Schema<IDeliveryDetails>(
     name: { type: String, required: true, trim: true, maxlength: 100 },
     phone: { type: String, required: true, trim: true, maxlength: 20 },
     address: { type: String, required: true, trim: true, maxlength: 500 },
+  },
+  { _id: false },
+);
+
+const paymentSchema = new Schema<IPaymentDetails>(
+  {
+    paymentId: { type: String, required: true },
+    method: { type: String, required: true },
+    cardNo: { type: String, required: true },
+    cardHolderName: { type: String, required: true },
+    cardExpiry: { type: String, required: true },
   },
   { _id: false },
 );
@@ -97,6 +117,10 @@ const orderSchema = new Schema<IOrder>(
     delivery: {
       type: deliverySchema,
       required: [true, 'Delivery details are required'],
+    },
+    payment: {
+      type: paymentSchema,
+      default: undefined,
     },
     status: {
       type: String,

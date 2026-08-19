@@ -84,13 +84,21 @@ export async function handlePayHereNotify(
       break;
   }
 
+  const update: Record<string, unknown> = { status: orderStatus };
+
+  if (orderStatus === 'confirmed') {
+    update.payment = {
+      paymentId: notification.transaction_id || '',
+      method: notification.method || '',
+      cardNo: notification.card_no || '',
+      cardHolderName: notification.card_holder_name || '',
+      cardExpiry: notification.card_expiry_date || '',
+    };
+  }
+
   const order = await Order.findOneAndUpdate(
     { customOrderId: notification.custom_1 },
-    {
-      $set: {
-        status: orderStatus,
-      },
-    },
+    { $set: update },
     { new: true },
   );
 
