@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { Order } from '../orders/order.model.js';
 
 interface PayHereNotification {
+  merchant_id: string;
   order_id: string;
   payhere_amount: string;
   payhere_currency: string;
@@ -40,18 +41,6 @@ function verifySignature(
     .digest('hex')
     .toUpperCase();
 
-  console.log('── PayHere Sig Debug ──');
-  console.log('merchant_id:', merchantId);
-  console.log('order_id:', notification.order_id);
-  console.log('payhere_amount:', notification.payhere_amount);
-  console.log('payhere_currency:', notification.payhere_currency);
-  console.log('status_code:', notification.status_code);
-  console.log('MD5(merchant_secret):', secretHash);
-  console.log('concat:', data);
-  console.log('expected:', expected);
-  console.log('received:', notification.md5sig);
-  console.log('match:', expected === notification.md5sig);
-
   return expected === notification.md5sig;
 }
 
@@ -64,19 +53,15 @@ function verifySignature(
  */
 export async function handlePayHereNotify(
   body: Record<string, string>,
-  merchantId: string,
   merchantSecret: string,
 ) {
   console.log('── PayHere Notify ──');
   console.log(JSON.stringify(body, null, 2));
 
-  if (!merchantSecret) {
-    console.error('⚠️ PAYHERE_MERCHANT_SECRET env var is empty!');
-  }
-
   const notification = body as unknown as PayHereNotification;
 
-  // Verify signature
+  const merchantId = notification.merchant_id;
+
   if (!verifySignature(notification, merchantId, merchantSecret)) {
     console.error('❌ PayHere signature verification failed');
     throw new Error('Invalid PayHere signature');
