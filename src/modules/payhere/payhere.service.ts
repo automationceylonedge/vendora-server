@@ -12,11 +12,10 @@ interface PayHereNotification {
   custom_2?: string;
   method?: string;
   status_message?: string;
-  transaction_id?: string;
+  payment_id?: string;
   card_holder_name?: string;
   card_no?: string;
-  card_brand?: string;
-  card_expiry_date?: string;
+  card_expiry?: string;
 }
 
 /**
@@ -88,11 +87,11 @@ export async function handlePayHereNotify(
 
   if (orderStatus === 'confirmed') {
     update.payment = {
-      paymentId: notification.transaction_id || '',
+      paymentId: notification.payment_id || '',
       method: notification.method || '',
       cardNo: notification.card_no || '',
       cardHolderName: notification.card_holder_name || '',
-      cardExpiry: notification.card_expiry_date || '',
+      cardExpiry: notification.card_expiry || '',
     };
   }
 
