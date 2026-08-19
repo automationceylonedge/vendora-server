@@ -19,18 +19,26 @@ interface PayHereNotification {
 /**
  * Verify PayHere MD5 signature.
  *
- * PayHere concatenates: merchant_id + order_id + amount + currency + status_code
- * then upper-case MD5 hashes it with the merchant secret.
+ * PayHere concatenates:
+ *   merchant_id + order_id + amount + currency + status_code + MD5(merchant_secret)
+ * then MD5 hashes the entire string (upper-case).
  */
 function verifySignature(
   notification: PayHereNotification,
   merchantId: string,
   merchantSecret: string,
 ): boolean {
-  const data = `${merchantId}${notification.order_id}${notification.payhere_amount}${notification.payhere_currency}${notification.status_code}`;
+  const secretHash = crypto
+    .createHash('md5')
+    .update(merchantSecret)
+    .digest('hex')
+    .toUpperCase();
+
+  const data = `${merchantId}${notification.order_id}${notification.payhere_amount}${notification.payhere_currency}${notification.status_code}${secretHash}`;
+
   const expected = crypto
     .createHash('md5')
-    .update(data + merchantSecret)
+    .update(data)
     .digest('hex')
     .toUpperCase();
 
