@@ -10,6 +10,7 @@ export const env = {
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   nodeEnv: process.env.NODE_ENV || 'development',
   clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+  serverUrl: process.env.SERVER_URL || 'http://localhost:3000',
 
   /* ── Cloudflare R2 ── */
   r2: {
@@ -19,5 +20,11 @@ export const env = {
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
     bucketName: process.env.R2_BUCKET_NAME!,
     publicUrl: process.env.R2_PUBLIC_URL!,
+  },
+
+  /* ── PayHere ── */
+  payHere: {
+    merchantId: process.env.PAYHERE_MERCHANT_ID || '',
+    merchantSecret: process.env.PAYHERE_MERCHANT_SECRET || '',
   },
 };

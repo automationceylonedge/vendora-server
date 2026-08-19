@@ -10,6 +10,7 @@ import authRoutes from './modules/auth/auth.routes.js';
 import orderRoutes from './modules/orders/order.routes.js';
 import productRoutes from './modules/products/product.routes.js';
 import userRoutes from './modules/users/user.routes.js';
+import payhereRoutes from './modules/payhere/payhere.routes.js';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/payhere', payhereRoutes);
 
 /* ── Error handler (must be last) ── */
 app.use(errorHandler);
