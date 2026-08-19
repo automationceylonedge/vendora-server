@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import * as productController from './product.controller';
-import { authenticate, authorize } from '../../middleware/auth';
-import { validate } from '../../middleware/validate';
-import { createProductSchema, updateProductSchema } from './product.validation';
-import { upload } from '../../shared/middleware/upload';
+import * as productController from './product.controller.js';
+import { authenticate, authorize } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
+import { createProductSchema, updateProductSchema } from './product.validation.js';
+import { upload } from '../../shared/middleware/upload.js';
 
 const router = Router();
 

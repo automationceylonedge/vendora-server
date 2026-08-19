@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/asyncHandler';
-import { sendSuccess } from '../../shared/utils/api-response';
-import * as orderService from './order.service';
+import { asyncHandler } from '../../middleware/asyncHandler.js';
+import { sendSuccess } from '../../shared/utils/api-response.js';
+import * as orderService from './order.service.js';
 
 /** Express 5 params may return string | string[] */
 function param(val: string | string[] | undefined): string {

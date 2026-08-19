@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import * as orderController from './order.controller';
-import { authenticate, authorize } from '../../middleware/auth';
-import { validate } from '../../middleware/validate';
-import { createOrderSchema } from './order.validation';
+import * as orderController from './order.controller.js';
+import { authenticate, authorize } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
+import { createOrderSchema } from './order.validation.js';
 
 const router = Router();
 

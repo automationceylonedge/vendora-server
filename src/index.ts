@@ -4,17 +4,17 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { env } from './config/env';
-import { errorHandler } from './middleware/errorHandler';
-import authRoutes from './modules/auth/auth.routes';
-import orderRoutes from './modules/orders/order.routes';
-import productRoutes from './modules/products/product.routes';
-import userRoutes from './modules/users/user.routes';
+import { env } from './config/env.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import authRoutes from './modules/auth/auth.routes.js';
+import orderRoutes from './modules/orders/order.routes.js';
+import productRoutes from './modules/products/product.routes.js';
+import userRoutes from './modules/users/user.routes.js';
 
 const app = express();
 
 /* ── Cloudflare R2 ── */
-import { initializeR2 } from './shared/utils/r2';
+import { initializeR2 } from './shared/utils/r2.js';
 initializeR2();
 
 /* ── MongoDB ── */

@@ -1,7 +1,7 @@
-import { Product } from './product.model';
-import { uploadFile, deleteFile } from '../../shared/utils/r2';
-import type { CreateProductInput, UpdateProductInput } from './product.validation';
-import { ApiError } from '../../shared/utils/api-error';
+import { Product } from './product.model.js';
+import { uploadFile, deleteFile } from '../../shared/utils/r2.js';
+import type { CreateProductInput, UpdateProductInput } from './product.validation.js';
+import { ApiError } from '../../shared/utils/api-error.js';
 
 /* ── Helpers ── */
 

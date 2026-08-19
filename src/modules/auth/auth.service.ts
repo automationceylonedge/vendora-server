@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../users/user.model';
-import { env } from '../../config/env';
-import { ApiError } from '../../shared/utils/api-error';
-import type { SignupInput, SigninInput } from './auth.validation';
-import type { JwtPayload } from '../../middleware/auth';
+import { User } from '../users/user.model.js';
+import { env } from '../../config/env.js';
+import { ApiError } from '../../shared/utils/api-error.js';
+import type { SignupInput, SigninInput } from './auth.validation.js';
+import type { JwtPayload } from '../../middleware/auth.js';
 
 function generateAccessToken(payload: JwtPayload): string {
   return jwt.sign(payload, env.jwtSecret, {

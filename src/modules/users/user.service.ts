@@ -1,6 +1,6 @@
-import { User } from './user.model';
-import { ApiError } from '../../shared/utils/api-error';
-import type { UpdateDeliveryInput } from './user.validation';
+import { User } from './user.model.js';
+import { ApiError } from '../../shared/utils/api-error.js';
+import type { UpdateDeliveryInput } from './user.validation.js';
 
 export async function getMe(userId: string) {
   const user = await User.findById(userId);

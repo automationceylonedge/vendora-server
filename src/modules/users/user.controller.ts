@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
-import { asyncHandler } from '../../middleware/asyncHandler';
-import { sendSuccess } from '../../shared/utils/api-response';
-import * as userService from './user.service';
+import { asyncHandler } from '../../middleware/asyncHandler.js';
+import { sendSuccess } from '../../shared/utils/api-response.js';
+import * as userService from './user.service.js';
 
 export const getMe = asyncHandler(async (req: Request, res: Response) => {
   const user = await userService.getMe(req.user!.userId);

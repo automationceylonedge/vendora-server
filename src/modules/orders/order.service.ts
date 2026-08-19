@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { Order } from './order.model';
-import { ApiError } from '../../shared/utils/api-error';
-import type { CreateOrderInput } from './order.validation';
+import { Order } from './order.model.js';
+import { ApiError } from '../../shared/utils/api-error.js';
+import type { CreateOrderInput } from './order.validation.js';
 
 export const SHIPPING_FEE = 450;
 export const FREE_SHIPPING_THRESHOLD = 10000;

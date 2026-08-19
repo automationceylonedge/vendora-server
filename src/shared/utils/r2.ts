@@ -4,7 +4,7 @@ import {
   DeleteObjectCommand,
   PutObjectCommandInput,
 } from '@aws-sdk/client-s3';
-import { env } from '../../config/env';
+import { env } from '../../config/env.js';
 
 let r2Client: S3Client | null = null;
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { ApiError } from '../shared/utils/api-error';
-import { sendError } from '../shared/utils/api-response';
+import { ApiError } from '../shared/utils/api-error.js';
+import { sendError } from '../shared/utils/api-response.js';
 
 export function errorHandler(
   err: Error,
