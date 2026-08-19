@@ -19,21 +19,20 @@ interface PayHereNotification {
 /**
  * Verify PayHere MD5 signature.
  *
- * PayHere concatenates:
- *   merchant_id + order_id + amount + currency + status_code + MD5(merchant_id)
- * then MD5 hashes the entire string (upper-case).
+ * md5sig = MD5(merchant_id + order_id + payhere_amount + payhere_currency + status_code + MD5(merchant_secret))
  */
 function verifySignature(
   notification: PayHereNotification,
   merchantId: string,
+  merchantSecret: string,
 ): boolean {
-  const idHash = crypto
+  const secretHash = crypto
     .createHash('md5')
-    .update(merchantId)
+    .update(merchantSecret)
     .digest('hex')
     .toUpperCase();
 
-  const data = `${merchantId}${notification.order_id}${notification.payhere_amount}${notification.payhere_currency}${notification.status_code}${idHash}`;
+  const data = `${merchantId}${notification.order_id}${notification.payhere_amount}${notification.payhere_currency}${notification.status_code}${secretHash}`;
 
   const expected = crypto
     .createHash('md5')
@@ -54,6 +53,7 @@ function verifySignature(
 export async function handlePayHereNotify(
   body: Record<string, string>,
   merchantId: string,
+  merchantSecret: string,
 ) {
   console.log('── PayHere Notify ──');
   console.log(JSON.stringify(body, null, 2));
@@ -61,7 +61,7 @@ export async function handlePayHereNotify(
   const notification = body as unknown as PayHereNotification;
 
   // Verify signature
-  if (!verifySignature(notification, merchantId)) {
+  if (!verifySignature(notification, merchantId, merchantSecret)) {
     console.error('❌ PayHere signature verification failed');
     throw new Error('Invalid PayHere signature');
   }

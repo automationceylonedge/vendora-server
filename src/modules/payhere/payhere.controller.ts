@@ -15,6 +15,7 @@ export async function payhereNotify(req: Request, res: Response) {
     await handlePayHereNotify(
       req.body as Record<string, string>,
       env.payHere.merchantId,
+      env.payHere.merchantSecret,
     );
     res.status(200).send('OK');
   } catch (err) {
