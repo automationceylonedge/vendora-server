@@ -28,6 +28,13 @@ export const env = {
     merchantSecret: process.env.PAYHERE_MERCHANT_SECRET || '',
   },
 
+  /* ── Brevo (transactional email) ── */
+  brevo: {
+    apiKey: process.env.BREVO_API_KEY || '',
+    senderEmail: process.env.BREVO_SENDER_EMAIL || 'hello@sipsa.lk',
+    senderName: process.env.BREVO_SENDER_NAME || 'Sipsa',
+  },
+
   /* ── Google OAuth ── */
   google: {
     webClientId: process.env.GOOGLE_WEB_CLIENT_ID || '',

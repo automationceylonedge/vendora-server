@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 import { Order } from './order.model.js';
 import { Product } from '../products/product.model.js';
 import { ApiError } from '../../shared/utils/api-error.js';
+import {
+  notifyBuyerOfStatusChange,
+  notifyVendorsOfNewOrder,
+} from './order-email.service.js';
 import type { CreateOrderInput } from './order.validation.js';
 
 export const SHIPPING_FEE = 450;
@@ -39,6 +43,9 @@ export async function createOrder(userId: string, input: CreateOrderInput) {
     delivery: input.delivery,
     status: 'pending',
   });
+
+  // Fire-and-forget: email failures never block order placement.
+  void notifyVendorsOfNewOrder(order);
 
   return order.toJSON();
 }
@@ -155,5 +162,8 @@ export async function updateOrderStatus(
 
   order.status = status;
   await order.save();
+
+  void notifyBuyerOfStatusChange(order);
+
   return order;
 }

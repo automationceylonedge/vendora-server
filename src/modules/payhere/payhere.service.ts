@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { Order } from '../orders/order.model.js';
+import { notifyBuyerOfStatusChange } from '../orders/order-email.service.js';
 
 interface PayHereNotification {
   merchant_id: string;
@@ -105,6 +106,7 @@ export async function handlePayHereNotify(
     console.warn(`⚠️ Order not found for custom_1: ${notification.custom_1}`);
   } else {
     console.log(`✅ Order ${notification.order_id} → ${orderStatus}`);
+    void notifyBuyerOfStatusChange(order);
   }
 
   return { ok: true };
