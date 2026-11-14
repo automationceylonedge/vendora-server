@@ -24,3 +24,12 @@ export const createOrderSchema = z.object({
 });
 
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
+
+// Vendors can only move an order forward to delivered / completed.
+export const updateOrderStatusSchema = z.object({
+  status: z.enum(['delivered', 'completed'], {
+    message: 'Status must be delivered or completed',
+  }),
+});
+
+export type UpdateOrderStatusInput = z.infer<typeof updateOrderStatusSchema>;

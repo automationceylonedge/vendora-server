@@ -37,6 +37,7 @@ export interface IOrder extends Document {
     | 'processing'
     | 'shipped'
     | 'delivered'
+    | 'completed'
     | 'cancelled';
   createdAt: Date;
   updatedAt: Date;
@@ -124,7 +125,7 @@ const orderSchema = new Schema<IOrder>(
     },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
+      enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'completed', 'cancelled'],
       default: 'pending',
     },
   },

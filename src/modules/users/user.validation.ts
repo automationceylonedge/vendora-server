@@ -7,3 +7,9 @@ export const updateDeliverySchema = z.object({
 });
 
 export type UpdateDeliveryInput = z.infer<typeof updateDeliverySchema>;
+
+export const updateBusinessSchema = z.object({
+  businessName: z.string().trim().min(1, 'Business name is required').max(120).optional(),
+});
+
+export type UpdateBusinessInput = z.infer<typeof updateBusinessSchema>;

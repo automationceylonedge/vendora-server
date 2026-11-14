@@ -1,4 +1,6 @@
 import { Product } from './product.model.js';
+import mongoose from 'mongoose';
+import { User } from '../users/user.model.js';
 import { uploadFile, deleteFile } from '../../shared/utils/r2.js';
 import type { CreateProductInput, UpdateProductInput } from './product.validation.js';
 import { ApiError } from '../../shared/utils/api-error.js';
@@ -42,6 +44,17 @@ export async function createProduct(
   input: CreateProductInput,
   files: Express.Multer.File[],
 ) {
+  // Vendors must have set a business name & logo before listing products
+  const vendor = await User.findById(vendorId).select('userType businessName businessLogo');
+  if (vendor && vendor.userType === 'vendor') {
+    if (!vendor.businessName || !vendor.businessLogo?.url) {
+      throw new ApiError(
+        403,
+        'Please set your business name and logo in Settings before adding products.',
+      );
+    }
+  }
+
   const images = await Promise.all(
     files.map(async (file, index) => {
       const fileName = generateFileName(file.originalname);
@@ -194,8 +207,33 @@ export async function browseProducts(category?: string, search?: string) {
     filter.title = { $regex: search.trim(), $options: 'i' };
   }
 
-  const products = await Product.find(filter).sort({ createdAt: -1 });
-  return products;
+  const products = await Product.find(filter)
+    .populate<{ vendor: PopulatedVendor }>('vendor', 'businessName businessLogo firstName')
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return products.map(serializeWithVendor);
+}
+
+/* ── Shared vendor-populate serializer (used by browse + admin) ── */
+
+export interface PopulatedVendor {
+  _id: mongoose.Types.ObjectId;
+  businessName?: string;
+  businessLogo?: { url?: string; key?: string };
+  firstName?: string;
+}
+
+/** Map a lean product (with populated `vendor`) to include vendorName/vendorLogo,
+ *  while keeping `vendor` as the id string for backwards compatibility. */
+export function serializeWithVendor(p: Record<string, unknown>): Record<string, unknown> {
+  const v = p.vendor as unknown as PopulatedVendor;
+  return {
+    ...p,
+    vendor: v._id.toString(),
+    vendorName: v.businessName || v.firstName || '',
+    vendorLogo: v.businessLogo?.url || '',
+  };
 }
 
 export async function deleteProduct(productId: string, vendorId: string) {

@@ -11,6 +11,9 @@ import orderRoutes from './modules/orders/order.routes.js';
 import productRoutes from './modules/products/product.routes.js';
 import userRoutes from './modules/users/user.routes.js';
 import payhereRoutes from './modules/payhere/payhere.routes.js';
+import adminRoutes from './modules/admin/admin.routes.js';
+import sliderRoutes from './modules/sliders/slider.routes.js';
+import sliderAdminRoutes from './modules/sliders/slider.admin.routes.js';
 
 const app = express();
 
@@ -40,6 +43,9 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payhere', payhereRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/sliders', sliderRoutes);
+app.use('/api/admin/sliders', sliderAdminRoutes);
 
 /* ── Error handler (must be last) ── */
 app.use(errorHandler);

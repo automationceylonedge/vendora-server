@@ -14,7 +14,10 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const list = asyncHandler(async (req: Request, res: Response) => {
-  const orders = await orderService.getMyOrders(req.user!.userId);
+  const orders = await orderService.listOrders(
+    req.user!.userId,
+    req.user!.userType,
+  );
   sendSuccess(res, orders);
 });
 
@@ -22,6 +25,18 @@ export const getById = asyncHandler(async (req: Request, res: Response) => {
   const order = await orderService.getOrderById(
     param(req.params.id),
     req.user!.userId,
+    req.user!.userType,
   );
   sendSuccess(res, order);
 });
+
+export const updateStatus = asyncHandler(
+  async (req: Request, res: Response) => {
+    const order = await orderService.updateOrderStatus(
+      param(req.params.id),
+      req.user!.userId,
+      req.body.status,
+    );
+    sendSuccess(res, order, 'Order status updated');
+  },
+);

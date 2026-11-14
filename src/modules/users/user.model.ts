@@ -7,15 +7,23 @@ export interface IDeliveryDetails {
   address: string;
 }
 
+export interface IBusinessLogo {
+  url: string;
+  key: string;
+}
+
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   userType: 'vendor' | 'admin' | 'buyer';
   status: 'active' | 'inactive' | 'suspended';
   refreshToken?: string;
+  googleId?: string;
   delivery: IDeliveryDetails;
+  businessName: string;
+  businessLogo: IBusinessLogo;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -47,9 +55,15 @@ const userSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      // Optional: password-less users sign in via Google OAuth
+      required: false,
       minlength: [8, 'Password must be at least 8 characters'],
       select: false,
+    },
+    googleId: {
+      type: String,
+      trim: true,
+      default: null,
     },
     userType: {
       type: String,
@@ -85,6 +99,22 @@ const userSchema = new Schema<IUser>(
         maxlength: [500, 'Delivery address cannot exceed 500 characters'],
       },
     },
+    businessName: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: [120, 'Business name cannot exceed 120 characters'],
+    },
+    businessLogo: {
+      url: {
+        type: String,
+        default: '',
+      },
+      key: {
+        type: String,
+        default: '',
+      },
+    },
   },
   {
     timestamps: true,
@@ -94,7 +124,7 @@ const userSchema = new Schema<IUser>(
 userSchema.index({ email: 1 });
 
 userSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
+  if (!this.isModified('password') || !this.password) return;
 
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);

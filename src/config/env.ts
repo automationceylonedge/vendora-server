@@ -27,4 +27,12 @@ export const env = {
     merchantId: process.env.PAYHERE_MERCHANT_ID || '',
     merchantSecret: process.env.PAYHERE_MERCHANT_SECRET || '',
   },
+
+  /* ── Google OAuth ── */
+  google: {
+    webClientId: process.env.GOOGLE_WEB_CLIENT_ID || '',
+    webClientSecret: process.env.GOOGLE_WEB_CLIENT_SECRET || '',
+    androidClientId: process.env.GOOGLE_ANDROID_CLIENT_ID || '',
+    iosClientId: process.env.GOOGLE_IOS_CLIENT_ID || '',
+  },
 };

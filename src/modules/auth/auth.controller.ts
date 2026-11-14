@@ -17,3 +17,8 @@ export const refresh = asyncHandler(async (req: Request, res: Response) => {
   const result = await authService.refreshAccessToken(req.body.refreshToken);
   sendSuccess(res, result, 'Token refreshed successfully');
 });
+
+export const googleSignIn = asyncHandler(async (req: Request, res: Response) => {
+  const result = await authService.googleSignin(req.body);
+  sendSuccess(res, result, 'Signed in with Google');
+});
